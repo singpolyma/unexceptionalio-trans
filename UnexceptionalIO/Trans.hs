@@ -12,12 +12,12 @@ module UnexceptionalIO.Trans (
 	UIO.UIO,
 	UIO.Unexceptional(..),
 	fromIO,
-	run,
-	runExceptIO,
-	-- * Unsafe entry points
 #ifdef __GLASGOW_HASKELL__
 	fromIO',
 #endif
+	run,
+	runExceptIO,
+	-- * Unsafe entry points
 	UIO.unsafeFromIO,
 	-- * Pseudo exceptions
 	UIO.SomeNonPseudoException,
@@ -62,12 +62,13 @@ import qualified UnexceptionalIO as UIO
 fromIO :: (UIO.Unexceptional m) => IO a -> Trans.ExceptT UIO.SomeNonPseudoException m a
 fromIO = Trans.ExceptT . UIO.fromIO
 
--- | You promise that 'e' covers all exceptions but 'PseudoException'
---   thrown by this 'IO' action
---
--- This function is partial if you lie
-fromIO' :: (Exception e, UIO.Unexceptional m) => IO a -> Trans.ExceptT e m a
-fromIO' = Trans.ExceptT . UIO.fromIO'
+-- | Catch any 'e' in an 'IO' action, with a default mapping for
+--   unexpected cases
+fromIO' :: (Exception e, UIO.Unexceptional m) =>
+	(UIO.SomeNonPseudoException -> e) -- ^ Default if an unexpected exception occurs
+	-> IO a
+	-> Trans.ExceptT e m a
+fromIO' f = Trans.ExceptT . UIO.fromIO' f
 
 -- | Re-embed 'UIO' into 'MonadIO'
 run :: (MonadIO m) => UIO.UIO a -> m a
