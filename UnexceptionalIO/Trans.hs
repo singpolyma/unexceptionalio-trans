@@ -29,7 +29,8 @@ module UnexceptionalIO.Trans (
 	UIO.bracket,
 #if MIN_VERSION_base(4,6,0)
 	UIO.forkFinally,
-	UIO.fork
+	UIO.fork,
+	UIO.ChildThreadError(..)
 #endif
 #endif
 ) where
