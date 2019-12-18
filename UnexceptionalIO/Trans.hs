@@ -80,7 +80,7 @@ runExceptIO :: (Exception e, MonadIO m) => Trans.ExceptT e UIO.UIO a -> m a
 runExceptIO = liftIO . UIO.runEitherIO . Trans.runExceptT
 
 #if MIN_VERSION_transformers(0,5,3)
-instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.AccumT w m) where
+instance (UIO.Unexceptional m, Monoid w) => UIO.Unexceptional (Trans.AccumT w m) where
 	lift = Trans.lift . UIO.lift
 #endif
 
