@@ -30,7 +30,7 @@ library
         build-depends:
                 base == 4.*,
                 transformers,
-                unexceptionalio == 0.5.0
+                unexceptionalio == 0.5.*
 
 source-repository head
         type:     git
