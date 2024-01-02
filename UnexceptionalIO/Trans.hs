@@ -42,10 +42,8 @@ import qualified Control.Monad.Trans.Accum as Trans
 #endif
 import qualified Control.Monad.Trans.Class as Trans
 import qualified Control.Monad.Trans.Cont as Trans
-import qualified Control.Monad.Trans.Error as Trans
 import qualified Control.Monad.Trans.Except as Trans
 import qualified Control.Monad.Trans.Identity as Trans
-import qualified Control.Monad.Trans.List as Trans
 import qualified Control.Monad.Trans.Maybe as Trans
 import qualified Control.Monad.Trans.RWS.Lazy as RWSL
 import qualified Control.Monad.Trans.RWS.Strict as RWSS
@@ -87,16 +85,10 @@ instance (UIO.Unexceptional m, Monoid w) => UIO.Unexceptional (Trans.AccumT w m)
 instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.ContT r m) where
 	lift = Trans.lift . UIO.lift
 
-instance (UIO.Unexceptional m, Trans.Error e) => UIO.Unexceptional (Trans.ErrorT e m) where
-	lift = Trans.lift . UIO.lift
-
 instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.ExceptT e m) where
 	lift = Trans.lift . UIO.lift
 
 instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.IdentityT m) where
-	lift = Trans.lift . UIO.lift
-
-instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.ListT m) where
 	lift = Trans.lift . UIO.lift
 
 instance (UIO.Unexceptional m) => UIO.Unexceptional (Trans.MaybeT m) where
